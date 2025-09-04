@@ -1,0 +1,12 @@
+# yml이 인프라 설정에 많이 쓰여서 계속 properties보다 yml을 쓰려고 하는 것
+spring:
+  application:
+    name: springrefresh
+
+jwt:
+  secret: 25c48f6fe346281312e7e439d2aea6cc
+  # 만료일
+  # 1분으로 한번 봐볼까? 밀리세컨드로 보는 것
+  access-token-expiration: 60000
+  # 5분으로 테스트
+  refresh-token-expiration: 300000
