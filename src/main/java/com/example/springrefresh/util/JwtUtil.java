@@ -1,5 +1,7 @@
 package com.example.springrefresh.util;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -65,4 +67,34 @@ public class JwtUtil {
                 .compact();
     }
 
+    public Claims getClaims(String token) {
+        return Jwts.parser().verifyWith(secretKey)
+                .build().parseSignedClaims(token).getPayload();
+    }
+
+    // 토큰에서 사용자 이름 추출
+    public String getUsername(String token) {
+//        return getClaims(token).getSubject(); // subject -> username
+        return getClaims(token).get("username", String.class);
+        // .claim("username", username)
+    }
+
+    // 토큰에서 역할 추출
+    public String getRole(String token) {
+//        return getClaims(token).getSubject(); // subject -> username
+        return getClaims(token).get("role", String.class);
+        // .claim("role", role)
+    }
+
+    // 토큰 유효성 검증 (만료 여부)
+    public boolean isExpired(String token) {
+        try {
+            // 파싱이 성공하긴 했는데 -> 만료된 토큰인 경우
+            return getClaims(token).getExpiration().before(new Date());
+        } catch (ExpiredJwtException e) {
+            // 이미 만료된 토큰이라도 파싱 자체는 성공할 수 있으므로, 예외 발생 시 true 반환
+            // 만료된 토큰이라 아예 파싱이 실패
+            return true;
+        }
+    }
 }
