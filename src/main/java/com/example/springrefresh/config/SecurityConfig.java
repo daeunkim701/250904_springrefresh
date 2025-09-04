@@ -68,14 +68,15 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
+//        config
         config.setAllowedOrigins(List.of("http://127.0.0.1:5500"));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("*"));
-        config.setAllowCredentials(true); // 쿠키 전송을 위해 필수
+        // VSCode Live Server
+        config.setAllowedMethods(List.of("*")); // POST, GET
+        config.setAllowedHeaders(List.of("*")); // Content-Type, Authorization
+        config.setAllowCredentials(true);
         config.setMaxAge(3600L);
-
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config); // 모든 경로에 대해서 source에 config를 등록(register)한다
+        source.registerCorsConfiguration("/**", config);
         return source;
     }
 
